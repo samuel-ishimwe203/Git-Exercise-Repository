@@ -943,3 +943,45 @@ To https://github.com/samuel-ishimwe203/Git-Exercise-Repository.git
 ```
 #### 10 . Pulling Changes from Remote Repositories:
 Here this is last step of part 3 where I push to local branch to the remote repository using git push
+```bash
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (main)
+$ git branch
+  dev
+  ft/branch
+  ft/experiment
+  ft/improved-branch-name
+  ft/new-feature
+  ft/new-feature-conflict
+* main
+
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (main)
+$ git pull origin main
+From https://github.com/samuel-ishimwe203/Git-Exercise-Repository
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (main)
+$ git add readme.md
+
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (main)
+$ git commit -m "Resolve merge conflict in readme.md"
+[main e1d6f51] Resolve merge conflict in readme.md
+ 1 file changed, 945 insertions(+)
+ create mode 100644 readme.md
+
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (main)
+$ git log --oneline --graph
+* e1d6f51 (HEAD -> main) Resolve merge conflict in readme.md
+*   b73aa35 (origin/main) Merge branch 'main' of https://github.com/samuel-ishimwe203/Git-Exercise-Repository
+|\
+| * 452901e all
+| * 16b9abb chore: Create third and fourth files
+* |   96b7ea3 Resolve merge conflict in conflict.txt using mergetool
+|\ \
+| * | 25ac41f (ft/new-feature-conflict) Update conflict.txt in ft/new-feature-conflict
+* | | 76e78c0 Update conflict.txt in main
+|/ /
+* | c070f4a Add conflict.txt from main
+* | f1927ab Updated project readme
+* | 18a1edf Implemented test 
+```
