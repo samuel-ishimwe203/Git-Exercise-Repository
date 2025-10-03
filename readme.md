@@ -670,10 +670,318 @@ and have 2 and 2 different commits each, respectively.
 
 ```
 
-## Advanced Workflows (10+ Challenges)
+## Advanced workflows (10+ Challenges)
 #### 1. Stashing Changes:
 Here I use git stash to save uncommitted changes temporarily in main.
 ```bash
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (main)
+$ git stash -u
+Saved working directory and index state WIP on main: f1927ab Updated project readme
 
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (main)
+$ git stash list
+stash@{0}: WIP on main: f1927ab Updated project readme
+```
 
+#### 2. Retrieving Stashed Changes:
+Here I use git stash pop to reapply the most recent stash on main.
+```bash
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (main)
+$ git stash pop
+Already up to date.
+readme.md already exists, no checkout
+error: could not restore untracked files from stash
+On branch main
+Your branch and 'origin/main' have diverged,
+and have 2 and 2 different commits each, respectively.
+  (use "git pull" if you want to integrate the remote branch with yours)
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        readme.md
+
+nothing added to commit but untracked files present (use "git add" to track)
+The stash entry is kept in case you need it again.
+
+```
+#### 3. Branch Merging Conflicts (Continued):
+Here I simulate a merge conflict between main and a feature branch, then resolve it manually.
+```bash
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (main)
+$ echo "This is the main branch version" > conflict.txt
+git add conflict.txt
+git commit -m "Add conflict.txt from main"
+warning: in the working copy of 'conflict.txt', LF will be replaced by CRLF the next time Git touches it
+[main c070f4a] Add conflict.txt from main
+ 1 file changed, 1 insertion(+)
+ create mode 100644 conflict.txt
+
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (main)
+$ git checkout -b ft/new-feature-conflict
+Switched to a new branch 'ft/new-feature-conflict'
+
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (ft/new-feature-conflict)
+$ echo "This is the feature branch version" > conflict.txt
+git add conflict.txt
+git commit -m "Update conflict.txt in ft/new-feature-conflict"
+warning: in the working copy of 'conflict.txt', LF will be replaced by CRLF the next time Git touches it
+[ft/new-feature-conflict 25ac41f] Update conflict.txt in ft/new-feature-conflict
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (ft/new-feature-conflict)
+$ git checkout main
+echo "This is a conflicting change in main" > conflict.txt
+git add conflict.txt
+git commit -m "Update conflict.txt in main"
+Switched to branch 'main'
+Your branch and 'origin/main' have diverged,
+and have 3 and 2 different commits each, respectively.
+  (use "git pull" if you want to integrate the remote branch with yours)
+warning: in the working copy of 'conflict.txt', LF will be replaced by CRLF the next time Git touches it
+[main 76e78c0] Update conflict.txt in main
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (main)
+$ git merge ft/new-feature-conflict
+Auto-merging conflict.txt
+CONFLICT (content): Merge conflict in conflict.txt
+Automatic merge failed; fix conflicts and then commit the result.
+
+```
+#### 4. Resolving Merge Conflicts with a Merge Tool:
+Here also I use git mergetool to visualize and resolve merge conflicts.
+```bash
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (main|MERGING)
+$ git config --global merge.tool vscode
+git config --global mergetool.vscode.cmd "code --wait $MERGED"
+
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (main|MERGING)
+$ git mergetool
+Merging:
+conflict.txt
+
+Normal merge conflict for 'conflict.txt':
+  {local}: modified file
+  {remote}: modified file
+conflict.txt seems unchanged.
+Was the merge successful [y/n]? :
+
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (main|MERGING)
+$ git add conflict.txt
+git commit -m "Resolve merge conflict in conflict.txt using mergetool"
+[main 96b7ea3] Resolve merge conflict in conflict.txt using mergetool
+```
+#### 5. Understanding Detached HEAD State:
+Here I detached HEAD means you’re not on a branch; use git checkout <branch-name> to recover.
+```bash
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (main)
+$ git log --oneline
+96b7ea3 (HEAD -> main) Resolve merge conflict in conflict.txt using mergetool
+76e78c0 Update conflict.txt in main
+25ac41f (ft/new-feature-conflict) Update conflict.txt in ft/new-feature-conflict
+c070f4a Add conflict.txt from main
+f1927ab Updated project readme
+18a1edf Implemented test 5
+c1ab859 chore: Create another file
+f6cf2a2 (ft/improved-branch-name, ft/experiment) chore: Create initial file
+
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (main)
+$ git checkout 18a1edf
+Note: switching to '18a1edf'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+Turn off this advice by setting config variable advice.detachedHead to false
+HEAD is now at 18a1edf Implemented test 5
+```
+#### 6. Ignoring Files/Directories:
+Here I use a .gitignore file (e.g., /tmp) to exclude files or directories from Git.
+```bash
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository ((18a1edf...))
+$ touch .gitignore
+
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository ((18a1edf...))
+$ git status --ignored
+HEAD detached at 18a1edf
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        .gitignore
+        conflict_BACKUP_2087.txt
+        conflict_BASE_2087.txt
+        conflict_LOCAL_2087.txt
+        conflict_REMOTE_2087.txt
+        readme.md
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository ((18a1edf...))
+$ git add .gitignore
+git commit -m "Add .gitignore to exclude temporary files"
+[detached HEAD 8a515b8] Add .gitignore to exclude temporary files
+ 1 file changed, 7 insertions(+)
+ create mode 100644 .gitignore
+```
+#### 7.Working with Tags:
+Here I create a tag v1.0 on the current commit using git tag.
+```bash
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository ((8a515b8...))
+$ git checkout main
+Warning: you are leaving 1 commit behind, not connected to
+any of your branches:
+
+  8a515b8 Add .gitignore to exclude temporary files
+
+If you want to keep it by creating a new branch, this may be a good time
+to do so with:
+
+ git branch <new-branch-name> 8a515b8
+
+Switched to branch 'main'
+Your branch and 'origin/main' have diverged,
+and have 6 and 2 different commits each, respectively.
+  (use "git pull" if you want to integrate the remote branch with yours)
+
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (main)
+$ git tag v1.0
+
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (main)
+$ git tag
+v1.0
+
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (main)
+$ git push origin v1.0
+Enumerating objects: 19, done.
+Counting objects: 100% (19/19), done.
+Delta compression using up to 16 threads
+Compressing objects: 100% (14/14), done.
+Writing objects: 100% (18/18), 1.62 KiB | 415.00 KiB/s, done.
+Total 18 (delta 6), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (6/6), done.
+To https://github.com/samuel-ishimwe203/Git-Exercise-Repository.git
+ * [new tag]         v1.0 -> v1.0
+
+```
+#### 8. Listing and Deleting Tags:
+Here I list tags with git tag and delete a tag using git tag -d <tag-name>.
+
+```bash
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (main)
+$ git tag v1.0
+
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (main)
+$ git tag
+v1.0
+
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (main)
+$ git push origin v1.0
+Enumerating objects: 19, done.
+Counting objects: 100% (19/19), done.
+Delta compression using up to 16 threads
+Compressing objects: 100% (14/14), done.
+Writing objects: 100% (18/18), 1.62 KiB | 415.00 KiB/s, done.
+Total 18 (delta 6), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (6/6), done.
+To https://github.com/samuel-ishimwe203/Git-Exercise-Repository.git
+ * [new tag]         v1.0 -> v1.0
+
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (main)
+$ git tag
+v1.0
+
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (main)
+$ git tag -d v1.0
+Deleted tag 'v1.0' (was 96b7ea3)
+```
+#### 9. Pushing Local Work to Remote Repositories:
+Here also I push my local branch to the remote repository using git push.
+
+```bash 
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (main)
+$ git branch
+  dev
+  ft/branch
+  ft/experiment
+  ft/improved-branch-name
+  ft/new-feature
+  ft/new-feature-conflict
+* main
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (main)
+$ git pull origin main
+From https://github.com/samuel-ishimwe203/Git-Exercise-Repository
+ * branch            main       -> FETCH_HEAD
+hint: Waiting for your editor to close the file... unix2dos: converting file C:/Users/user/Desktop/Git-Exercises/Git-Exercise-Repository/.git/MERGE_MSG to DOS format...
+dos2unix: converting file C:/Users/user/Desktop/Git-Exercises/Git-Exercise-Repository/.git/MERGE_MSG to Unix format...
+Merge made by the 'ort' strategy.
+ test1.md | 0
+ test2.md | 0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+ delete mode 100644 test1.md
+ delete mode 100644 test2.md
+
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (main)
+$ git push origin main
+Enumerating objects: 4, done.
+Counting objects: 100% (4/4), done.
+Delta compression using up to 16 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (2/2), 303 bytes | 303.00 KiB/s, done.
+Total 2 (delta 1), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To https://github.com/samuel-ishimwe203/Git-Exercise-Repository.git
+   452901e..b73aa35  main -> main
+
+```
+#### 10 . Pulling Changes from Remote Repositories:
+Here this is last step of part 3 where I push to local branch to the remote repository using git push
+```bash
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (main)
+$ git branch
+  dev
+  ft/branch
+  ft/experiment
+  ft/improved-branch-name
+  ft/new-feature
+  ft/new-feature-conflict
+* main
+
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (main)
+$ git pull origin main
+From https://github.com/samuel-ishimwe203/Git-Exercise-Repository
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (main)
+$ git add readme.md
+
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (main)
+$ git commit -m "Resolve merge conflict in readme.md"
+[main e1d6f51] Resolve merge conflict in readme.md
+ 1 file changed, 945 insertions(+)
+ create mode 100644 readme.md
+
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (main)
+$ git log --oneline --graph
+* e1d6f51 (HEAD -> main) Resolve merge conflict in readme.md
+*   b73aa35 (origin/main) Merge branch 'main' of https://github.com/samuel-ishimwe203/Git-Exercise-Repository
+|\
+| * 452901e all
+| * 16b9abb chore: Create third and fourth files
+* |   96b7ea3 Resolve merge conflict in conflict.txt using mergetool
+|\ \
+| * | 25ac41f (ft/new-feature-conflict) Update conflict.txt in ft/new-feature-conflict
+* | | 76e78c0 Update conflict.txt in main
+|/ /
+* | c070f4a Add conflict.txt from main
+* | f1927ab Updated project readme
+* | 18a1edf Implemented test 
 ```
