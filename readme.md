@@ -290,7 +290,7 @@ Switched to branch 'main'
 Your branch is behind 'origin/main' by 2 commits, and can be fast-forwarded.
   (use "git pull" to update your local branch)
 
-user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (main)
+user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/clGit-Exercise-Repository (main)
 $ git cherry-pick ac9a27e
 [main 18a1edf] Implemented test 5
  Date: Thu Oct 2 20:03:57 2025 +0200
@@ -377,7 +377,7 @@ user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (ft
 $ git commit -m "Implemented core functionality for new feature"
 [ft/new-feature 411deb7] Implemented core functionality for new feature
  1 file changed, 1 insertion(+)
- create mode 100644 feature.txt
+ create mode 100644 feature.txtcd 
 
 user@LAPTOP-7PT2H9GQ MINGW64 ~/Desktop/Git-Exercises/Git-Exercise-Repository (ft/new-feature)
 $ git log --oneline
@@ -671,3 +671,9 @@ and have 2 and 2 different commits each, respectively.
 ```
 
 ## Advanced Workflows (10+ Challenges)
+#### 1. Stashing Changes:
+Here I use git stash to save uncommitted changes temporarily in main.
+```bash
+
+
+```
