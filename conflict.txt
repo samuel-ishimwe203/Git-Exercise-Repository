@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 This is a conflicting change in main
+=======
+This is the feature branch version
+>>>>>>> ft/new-feature-conflict
